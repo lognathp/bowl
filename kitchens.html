@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bowl — Kitchens</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<h2>Select Your Meal Provider</h2>
+
+<div class="container">
+    <select id="filterCategory">
+        <option value="">Filter by Diet Category</option>
+        <option value="weightloss">Weight Loss</option>
+        <option value="weightgain">Weight Gain</option>
+        <option value="musclegain">Muscle Gain</option>
+        <option value="diabetic">Diabetic Friendly</option>
+    </select>
+
+    <select id="filterMealType">
+        <option value="">Filter by Meal Type</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+    </select>
+
+    <button id="resetFilters" style="display:none;">Reset Filters</button>
+</div>
+
+<div class="list" id="kitchensList"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

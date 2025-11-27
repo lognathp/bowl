@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Bowl — Meal Options</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h2>Select Meals</h2>
+
+<div class="container" id="mealHeader"></div>
+<div class="list" id="mealsList"></div>
+
+<div class="container">
+    <div id="priceBox">Total: ₹0</div>
+    <button id="toDetailsBtn">Proceed to Details</button>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+    document.getElementById('toDetailsBtn').onclick = () => {
+      const selected = JSON.parse(localStorage.getItem('selected_meals_ids') || '[]');
+      if (!selected.length) return alert('Please select at least one meal.');
+      window.location.href = 'subscribe.html';
+    };
+</script>
+</body>
+</html>
