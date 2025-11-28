@@ -2,20 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bowl — Your Details</title>
+    <title>Bowl — Subscription Details</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h2>Enter Your Details</h2>
 
-<div class="container" id="summaryBox"></div>
+<h2>Subscription Details</h2>
 
-<form class="container" id="userForm">
-    <input id="uname" type="text" placeholder="Full name" required>
-    <input id="umobile" type="text" placeholder="Mobile number" required>
-    <textarea id="uaddress" placeholder="Delivery address" required></textarea>
-    <button type="submit">Proceed to Payment</button>
-</form>
+<div id="summaryBox"></div>
+
+<div class="container">
+    <form id="userForm">
+        <label>Name</label>
+        <input type="text" id="uname" required>
+
+        <label>Mobile</label>
+        <input type="text" id="umobile" required>
+
+        <label>Delivery Address</label>
+        <textarea id="uaddress" required></textarea>
+
+        <button type="submit">Proceed to Payment</button>
+    </form>
+</div>
 
 <script src="js/app.js"></script>
 </body>

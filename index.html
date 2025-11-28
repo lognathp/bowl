@@ -2,31 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bowl — Select Location</title>
+    <title>Bowl — Healthy Diet Food Delivery</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-<h2>Welcome to Bowl</h2>
 
-<div class="container">
-    <label for="locationSelect">Select your location</label>
-    <select id="locationSelect">
-        <option value="">-- Choose location --</option>
-        <option value="bangalore">Bangalore</option>
-        <option value="chennai">Chennai</option>
-    </select>
+<!-- HEADER -->
+<header class="site-header">
+    <div class="header-inner">
+        <div class="logo">Bowl</div>
+        <nav class="nav">
+            <a href="index.html">Home</a>
+            <a href="kitchens.html">Kitchens</a>
+            <a href="#about">About</a>
+        </nav>
+    </div>
+</header>
 
-    <button id="continueBtn">Continue</button>
-</div>
+<!-- HERO SECTION -->
+<section class="hero">
+    <img class="hero-bg" src="https://quanutrition.com/wp-content/uploads/2025/03/1500-Calorie-Indian-Diet-Plan.jpg" />
+
+    <div class="hero-overlay">
+        <h1>Eat Clean. Feel Better.</h1>
+        <p>India's first diet-focused food delivery platform.</p>
+        <p>100% health-verified cloud kitchens serving your fitness goals.</p>
+
+        <button class="hero-btn" onclick="scrollToLocation()">Choose Location</button>
+    </div>
+</section>
+
+
+<!-- LOCATION SELECTOR -->
+<section class="location-section" id="location-section">
+    <h2>Select Your Delivery Location</h2>
+
+    <div class="location-box">
+        <select id="locationSelect">
+            <option value="">Loading locations...</option>
+        </select>
+
+        <button id="continueBtn" class="primary-btn">Continue</button>
+    </div>
+</section>
+
+
+<!-- ABOUT SECTION -->
+<section class="about" id="about">
+    <h2>About Bowl</h2>
+    <p>
+        Bowl makes healthy living simple. We partner with verified cloud kitchens to
+        deliver goal-based diet meals — weight loss, muscle gain, diabetic-friendly,
+        high-protein, clean eating & more.
+    </p>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2025 Bowl Health — All Rights Reserved</p>
+</footer>
 
 <script src="js/app.js"></script>
+
 <script>
-    document.getElementById('continueBtn').onclick = () => {
-      const loc = document.getElementById('locationSelect').value;
-      if (!loc) return alert('Please select a location.');
-      localStorage.setItem('location', loc);
-      window.location.href = 'kitchens.html';
-    };
+    function scrollToLocation() {
+        document.getElementById("location-section")
+            .scrollIntoView({ behavior: "smooth" });
+    }
 </script>
+
 </body>
 </html>

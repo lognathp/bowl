@@ -1,585 +1,445 @@
-/* ========== DATA ========== */
-/* Using the exact kitchens you provided, expanded to include categories with meals */
-const kitchens = {
-  bangalore: [
-{
-      id: 1,
-      name: "FitFuel Kitchen",
-      img: "https://picsum.photos/seed/fitfuel/400/300",
-      categories: {
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 1101, type: "Breakfast", name: "Oats & Fruit Bowl", price: 120, img: "https://picsum.photos/seed/wlbf/400/300" },
-            { id: 1102, type: "Lunch", name: "Grilled Chicken Salad", price: 220, img: "https://picsum.photos/seed/wlll/400/300" },
-            { id: 1103, type: "Dinner", name: "Steamed Veg Plate", price: 160, img: "https://picsum.photos/seed/wldn/400/300" }
-          ]
-        },
-        weightgain: {
-          label: "Weight Gain",
-          meals: [
-            { id: 1201, type: "Breakfast", name: "Peanut Butter Oats", price: 150, img: "https://picsum.photos/seed/wgbf/400/300" },
-            { id: 1202, type: "Lunch", name: "Calorie Dense Rice Bowl", price: 260, img: "https://picsum.photos/seed/wgll/400/300" },
-            { id: 1203, type: "Dinner", name: "Paneer Ghee Roast", price: 240, img: "https://picsum.photos/seed/wgdn/400/300" }
-          ]
-        },
-        musclegain: {
-          label: "Muscle Gain",
-          meals: [
-            { id: 1301, type: "Breakfast", name: "Egg White Omelette", price: 180, img: "https://picsum.photos/seed/mgbf/400/300" },
-            { id: 1302, type: "Lunch", name: "High Protein Chicken Rice", price: 270, img: "https://picsum.photos/seed/mgll/400/300" },
-            { id: 1303, type: "Dinner", name: "Beef Power Bowl", price: 320, img: "https://picsum.photos/seed/mgdn/400/300" }
-          ]
-        },
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 1401, type: "Breakfast", name: "Low Sugar Idli", price: 110, img: "https://picsum.photos/seed/dbbf/400/300" },
-            { id: 1402, type: "Lunch", name: "Brown Rice & Dal", price: 180, img: "httpsum.photos/seed/dbll/400/300" },
-            { id: 1403, type: "Dinner", name: "Millet Veg Bowl", price: 150, img: "https://picsum.photos/seed/dbdn/400/300" }
-          ]
-        }
-      }
-    },
+/* ============================================================
+   GOOGLE SHEETS CONFIG (OpenSheet)
+============================================================ */
+const SHEET_ID = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM"; // <-- REPLACE
+const BASE_URL = `https://opensheet.elk.sh/${SHEET_ID}`;
 
-    {
-      id: 2,
-      name: "KetoLite Kitchen",
-      img: "https://picsum.photos/seed/ketolite/400/300",
-      categories: {
-        musclegain: {
-          label: "Muscle Gain",
-          meals: [
-            { id: 2001, type: "Breakfast", name: "Keto Paneer Bowl", price: 190, img: "https://picsum.photos/seed/kl1/400/300" },
-            { id: 2002, type: "Dinner", name: "Zero Carb Chicken", price: 270, img: "https://picsum.photos/seed/kl2/400/300" }
-          ]
-        },
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 2003, type: "Lunch", name: "Cauliflower Rice Bowl", price: 170, img: "https://picsum.photos/seed/kl3/400/300" }
-          ]
-        },
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 2004, type: "Dinner", name: "Low GI Fish Bowl", price: 210, img: "https://picsum.photos/seed/kl4/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 3,
-      name: "GreenBowl Meals",
-      img: "https://picsum.photos/seed/greenbowl/400/300",
-      categories: {
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 3001, type: "Breakfast", name: "Green Smoothie Bowl", price: 130, img: "https://picsum.photos/seed/gb1/400/300" },
-            { id: 3002, type: "Lunch", name: "Quinoa Veg Bowl", price: 200, img: "https://picsum.photos/seed/gb2/400/300" }
-          ]
-        },
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 3003, type: "Dinner", name: "Brown Rice & Dal", price: 150, img: "https://picsum.photos/seed/gb3/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 4,
-      name: "ProteinBox Kitchen",
-      img: "https://picsum.photos/seed/proteinbox/400/300",
-      categories: {
-        musclegain: {
-          label: "Muscle Gain",
-          meals: [
-            { id: 4001, type: "Breakfast", name: "Protein Pancakes", price: 170, img: "https://picsum.photos/seed/pb1/400/300" },
-            { id: 4002, type: "Lunch", name: "High Protein Chicken Rice", price: 260, img: "https://picsum.photos/seed/pb2/400/300" },
-            { id: 4003, type: "Dinner", name: "Paneer Protein Bowl", price: 220, img: "https://picsum.photos/seed/pb3/400/300" }
-          ]
-        },
-        weightgain: {
-          label: "Weight Gain",
-          meals: [
-            { id: 4004, type: "Lunch", name: "Calorie Dense Rice Bowl", price: 300, img: "https://picsum.photos/seed/pb4/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 5,
-      name: "Diabetic Delight Hub",
-      img: "https://picsum.photos/seed/diabeticdelight/400/300",
-      categories: {
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 5001, type: "Breakfast", name: "Low Sugar Idli", price: 120, img: "https://picsum.photos/seed/dd1/400/300" },
-            { id: 5002, type: "Lunch", name: "Brown Rice Salad", price: 180, img: "https://picsum.photos/seed/dd2/400/300" }
-          ]
-        },
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 5003, type: "Dinner", name: "Grilled Veg Plate", price: 150, img: "https://picsum.photos/seed/dd3/400/300" }
-          ]
-        }
-      }
-    }
-  ],
-
-  chennai: [
-    {
-          id: 6,
-          name: "HealthyRoots Kitchen",
-          img: "https://picsum.photos/seed/healthyroots/400/300",
-          categories: {
-            weightloss: {
-              label: "Weight Loss",
-              meals: [
-                { id: 2101, type: "Breakfast", name: "Fruit & Chia Bowl", price: 130, img: "https://picsum.photos/seed/wlbf2/400/300" },
-                { id: 2102, type: "Lunch", name: "Lentil Veg Bowl", price: 190, img: "https://picsum.photos/seed/wlll2/400/300" },
-                { id: 2103, type: "Dinner", name: "Veg Soup & Salad", price: 150, img: "https://picsum.photos/seed/wldn2/400/300" }
-              ]
-            },
-            weightgain: {
-              label: "Weight Gain",
-              meals: [
-                { id: 2201, type: "Breakfast", name: "Banana Peanut Smoothie", price: 160, img: "https://picsum.photos/seed/wgbf2/400/300" },
-                { id: 2202, type: "Lunch", name: "High-Cal Pasta Bowl", price: 290, img: "https://picsum.photos/seed/wgll2/400/300" },
-                { id: 2203, type: "Dinner", name: "Creamy Paneer Masala", price: 250, img: "https://picsum.photos/seed/wgdn2/400/300" }
-              ]
-            },
-            musclegain: {
-              label: "Muscle Gain",
-              meals: [
-                { id: 2301, type: "Breakfast", name: "Protein Pancakes", price: 170, img: "https://picsum.photos/seed/mgbf2/400/300" },
-                { id: 2302, type: "Lunch", name: "Fish Protein Bowl", price: 280, img: "https://picsum.photos/seed/mgll2/400/300" },
-                { id: 2303, type: "Dinner", name: "Paneer Power Bowl", price: 260, img: "https://picsum.photos/seed/mgdn2/400/300" }
-              ]
-            },
-            diabetic: {
-              label: "Diabetic Friendly",
-              meals: [
-                { id: 2401, type: "Breakfast", name: "Ragi Dosa", price: 120, img: "https://picsum.photos/seed/dbbf2/400/300" },
-                { id: 2402, type: "Lunch", name: "Millet Khichdi", price: 170, img: "https://picsum.photos/seed/dbll2/400/300" },
-                { id: 2403, type: "Dinner", name: "Lentil Spinach Bowl", price: 160, img: "https://picsum.photos/seed/dbdn2/400/300" }
-              ]
-            }
-          }
-        },
-    {
-      id: 7,
-      name: "HighProtein Hub",
-      img: "https://picsum.photos/seed/highprotein/400/300",
-      categories: {
-        musclegain: {
-          label: "Muscle Gain",
-          meals: [
-            { id: 6001, type: "Breakfast", name: "Egg & Avocado Toast", price: 180, img: "https://picsum.photos/seed/hp1/400/300" },
-            { id: 6002, type: "Lunch", name: "Fish Protein Bowl", price: 260, img: "https://picsum.photos/seed/hp2/400/300" }
-          ]
-        },
-        weightgain: {
-          label: "Weight Gain",
-          meals: [
-            { id: 6003, type: "Dinner", name: "Ghee Rice Plate", price: 270, img: "https://picsum.photos/seed/hp3/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 8,
-      name: "LeanMeal Factory",
-      img: "https://picsum.photos/seed/leanmeal/400/300",
-      categories: {
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 7001, type: "Breakfast", name: "Oats Porridge", price: 110, img: "https://picsum.photos/seed/lm1/400/300" },
-            { id: 7002, type: "Lunch", name: "Grilled Tofu Salad", price: 190, img: "https://picsum.photos/seed/lm2/400/300" },
-            { id: 7003, type: "Dinner", name: "Mixed Veg Stew", price: 140, img: "https://picsum.photos/seed/lm3/400/300" }
-          ]
-        },
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 7004, type: "Lunch", name: "Low GI Millet Bowl", price: 180, img: "https://picsum.photos/seed/lm4/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 9,
-      name: "SugarCare Kitchen",
-      img: "https://picsum.photos/seed/sugarcare/400/300",
-      categories: {
-        diabetic: {
-          label: "Diabetic Friendly",
-          meals: [
-            { id: 8001, type: "Breakfast", name: "Fenugreek Pancake", price: 120, img: "https://picsum.photos/seed/sc1/400/300" },
-            { id: 8002, type: "Dinner", name: "Spiced Lentil Bowl", price: 160, img: "https://picsum.photos/seed/sc2/400/300" }
-          ]
-        },
-        weightloss: {
-          label: "Weight Loss",
-          meals: [
-            { id: 8003, type: "Lunch", name: "Sprout Salad", price: 150, img: "https://picsum.photos/seed/sc3/400/300" }
-          ]
-        }
-      }
-    },
-
-    {
-      id: 10,
-      name: "MuscleMax Meals",
-      img: "https://picsum.photos/seed/musclemax/400/300",
-      categories: {
-        musclegain: {
-          label: "Muscle Gain",
-          meals: [
-            { id: 9001, type: "Lunch", name: "High Protein Fish Meal", price: 280, img: "https://picsum.photos/seed/mm1/400/300" },
-            { id: 9002, type: "Dinner", name: "Beef Power Bowl", price: 320, img: "https://picsum.photos/seed/mm2/400/300" }
-          ]
-        },
-        weightgain: {
-          label: "Weight Gain",
-          meals: [
-            { id: 9003, type: "Breakfast", name: "Peanut Butter Oats", price: 160, img: "https://picsum.photos/seed/mm3/400/300" }
-          ]
-        }
-      }
-    }
-  ]
-};
-
-/* ========== UTILITIES ========== */
-function findKitchenById(location, id) {
-  return (kitchens[location] || []).find(k => k.id === id);
+/* ============================================================
+   LOAD ANY SHEET
+============================================================ */
+async function loadSheet(sheetName) {
+    const url = `${BASE_URL}/${sheetName}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to load sheet: " + sheetName);
+    return await res.json();
 }
 
-function findCategory(kitchen, catKey) {
-  return kitchen && kitchen.categories && kitchen.categories[catKey];
-}
+/* ============================================================
+   LOAD ALL DATA FROM GOOGLE SHEETS
+============================================================ */
+async function loadAllData() {
+    const [
+        locations,
+        kitchens,
+        mealPlans,
+        meals,
+        kitchenMealPlans
+    ] = await Promise.all([
+        loadSheet("locations"),
+        loadSheet("kitchens"),
+        loadSheet("meal_plans"),
+        loadSheet("meals"),
+        loadSheet("kitchen_meal_plans")
+    ]);
 
-/* ========== KITCHENS PAGE WITH FILTERS ========== */
-if (location.pathname.includes('kitchens.html')) {
-  const loc = localStorage.getItem('location') || 'bangalore';
-  const kitchensList = document.getElementById('kitchensList');
-  const filterCategory = document.getElementById('filterCategory');
-  const filterMealType = document.getElementById('filterMealType');
-  const resetBtn = document.getElementById('resetFilters');
-
-  const allKitchens = kitchens[loc] || [];
-
-  function renderKitchens(list) {
-    kitchensList.innerHTML = "";
-
-    if (!list.length) {
-      kitchensList.innerHTML = `<p>No kitchens match your filters.</p>`;
-      return;
-    }
-
-    list.forEach(k => {
-      kitchensList.innerHTML += `
-        <div class="card">
-          <img src="${k.img}">
-          <div>
-            <h3>${k.name}</h3>
-            <p style="color:#6b7280;">
-              Categories: ${Object.values(k.categories).map(c => c.label).join(', ')}
-            </p>
-            <button onclick="selectKitchen(${k.id})">View Meal Plans</button>
-          </div>
-        </div>
-      `;
+    /* ===== Convert all IDs to numbers ===== */
+    locations.forEach(l => l.location_id = Number(l.location_id));
+    kitchens.forEach(k => {
+        k.kitchen_id = Number(k.kitchen_id);
+        k.location_id = Number(k.location_id);
     });
-  }
+    mealPlans.forEach(p => p.plan_id = Number(p.plan_id));
+    meals.forEach(m => {
+        m.meal_id = Number(m.meal_id);
+        m.kitchen_id = Number(m.kitchen_id);
+        m.plan_id = Number(m.plan_id);
+        m.price = Number(m.price);
+    });
+    kitchenMealPlans.forEach(kmp => {
+        kmp.kitchen_id = Number(kmp.kitchen_id);
+        kmp.plan_id = Number(kmp.plan_id);
+        kmp.enabled = String(kmp.enabled).toLowerCase() === "true";
+    });
 
-  function applyFilters() {
-    let filtered = [...allKitchens];
+    /* ===== Build lookup maps ===== */
+    const kitchenById = {};
+    const kitchensByLocation = {};
+    kitchens.forEach(k => {
+        kitchenById[k.kitchen_id] = k;
+        if (!kitchensByLocation[k.location_id]) kitchensByLocation[k.location_id] = [];
+        kitchensByLocation[k.location_id].push(k);
+    });
 
-    const catVal = filterCategory.value;
-    const mealTypeVal = filterMealType.value;
+    const planById = {};
+    mealPlans.forEach(p => planById[p.plan_id] = p);
 
-    // FILTER 1 — Category (Weight Loss / Weight Gain / Muscle Gain / Diabetic)
-    if (catVal) {
-      filtered = filtered.filter(k =>
-        k.categories[catVal] !== undefined
-      );
+    const mealsByKitchenPlan = {};
+    meals.forEach(m => {
+        if (!mealsByKitchenPlan[m.kitchen_id]) mealsByKitchenPlan[m.kitchen_id] = {};
+        if (!mealsByKitchenPlan[m.kitchen_id][m.plan_id]) mealsByKitchenPlan[m.kitchen_id][m.plan_id] = [];
+        mealsByKitchenPlan[m.kitchen_id][m.plan_id].push(m);
+    });
+
+    // which plans each kitchen offers
+    const kitchenPlans = {};
+    kitchenMealPlans.forEach(row => {
+        if (!row.enabled) return;
+        if (!kitchenPlans[row.kitchen_id]) kitchenPlans[row.kitchen_id] = [];
+        kitchenPlans[row.kitchen_id].push(row.plan_id);
+    });
+
+    /* Store everything globally */
+    window.APP = {
+        locations,
+        kitchens,
+        mealPlans,
+        meals,
+        kitchenMealPlans,
+        kitchenById,
+        kitchensByLocation,
+        planById,
+        mealsByKitchenPlan,
+        kitchenPlans
+    };
+
+    return window.APP;
+}
+
+/* ============================================================
+   PAGE INITIALIZATION ROUTER
+============================================================ */
+loadAllData().then(() => {
+    const path = location.pathname;
+    if (path.includes("index") || path.endsWith("/")) initLocationPage();
+    if (path.includes("kitchens.html")) initKitchensPage();
+    if (path.includes("categories.html")) initCategoriesPage();
+    if (path.includes("meal-options.html")) initMealsPage();
+    if (path.includes("subscribe.html")) initSubscribePage();
+    if (path.includes("payment.html")) initPaymentPage();
+    if (path.includes("success.html")) initSuccessPage();
+});
+
+/* ============================================================
+   1. LOCATION PAGE
+============================================================ */
+function initLocationPage() {
+    const sel = document.getElementById("locationSelect");
+    sel.innerHTML = `<option value="">-- Choose location --</option>`;
+
+    APP.locations.forEach(l => {
+        sel.innerHTML += `<option value="${l.location_id}">${l.location_name}</option>`;
+    });
+
+    document.getElementById("continueBtn").onclick = () => {
+        const v = sel.value;
+        if (!v) return alert("Please select a location");
+        localStorage.setItem("location", v);
+        window.location.href = "kitchens.html";
+    };
+}
+
+/* ============================================================
+   2. KITCHENS PAGE
+============================================================ */
+function initKitchensPage() {
+    const locId = Number(localStorage.getItem("location"));
+    const kitchens = APP.kitchensByLocation[locId] || [];
+
+    const kitchensList = document.getElementById("kitchensList");
+    const filterCategory = document.getElementById("filterCategory");
+    const filterMealType = document.getElementById("filterMealType");
+    const resetBtn = document.getElementById("resetFilters");
+
+    /* load diet categories dynamically */
+    APP.mealPlans.forEach(p => {
+        filterCategory.innerHTML += `<option value="${p.plan_id}">${p.plan_name}</option>`;
+    });
+
+    function render(list) {
+        kitchensList.innerHTML = "";
+        if (!list.length) {
+            kitchensList.innerHTML = `<p>No kitchens match filters.</p>`;
+            return;
+        }
+
+        list.forEach(k => {
+            const kid = k.kitchen_id;
+            const plans = APP.kitchenPlans[kid] || [];
+            const planLabels = plans.map(pid => APP.planById[pid].plan_name).join(", ");
+
+            kitchensList.innerHTML += `
+                <div class="card">
+                    <img src="${k.image_url}">
+                    <div>
+                        <h3>${k.kitchen_name}</h3>
+                        <p style="color:#666;">Categories: ${planLabels}</p>
+                        <button onclick="selectKitchen(${kid})">View Meal Plans</button>
+                    </div>
+                </div>
+            `;
+        });
     }
 
-    // FILTER 2 — Meal Type (Breakfast / Lunch / Dinner)
-    if (mealTypeVal) {
-      filtered = filtered.filter(k => {
-        // check each category for that meal type
-        return Object.values(k.categories).some(cat =>
-          cat.meals.some(m => m.type === mealTypeVal)
-        );
-      });
+    function applyFilters() {
+        let result = [...kitchens];
+
+        const catVal = Number(filterCategory.value);
+        const mealVal = filterMealType.value;
+
+        // filter by diet category
+        if (catVal) {
+            result = result.filter(k =>
+                (APP.kitchenPlans[k.kitchen_id] || []).includes(catVal)
+            );
+        }
+
+        // filter by meal type
+        if (mealVal) {
+            result = result.filter(k => {
+                const kid = k.kitchen_id;
+                const allMeals = APP.meals.filter(m => m.kitchen_id === kid);
+                return allMeals.some(m => m.meal_type === mealVal);
+            });
+        }
+
+        resetBtn.style.display = (catVal || mealVal) ? "block" : "none";
+        render(result);
     }
 
-    resetBtn.style.display = (catVal || mealTypeVal) ? "block" : "none";
+    filterCategory.onchange = applyFilters;
+    filterMealType.onchange = applyFilters;
 
-    renderKitchens(filtered);
-  }
+    resetBtn.onclick = () => {
+        filterCategory.value = "";
+        filterMealType.value = "";
+        resetBtn.style.display = "none";
+        render(kitchens);
+    };
 
-  filterCategory.onchange = applyFilters;
-  filterMealType.onchange = applyFilters;
-
-  resetBtn.onclick = () => {
-    filterCategory.value = "";
-    filterMealType.value = "";
-    resetBtn.style.display = "none";
-    renderKitchens(allKitchens);
-  };
-
-  renderKitchens(allKitchens);
+    render(kitchens);
 }
 
 function selectKitchen(id) {
-  localStorage.setItem('kitchenId', id);
-  window.location.href = "categories.html";
+    localStorage.setItem("kitchenId", id);
+    window.location.href = "categories.html";
 }
 
-/* ========== CATEGORIES PAGE ========== */
-if (location.pathname.includes('categories.html')) {
-  const loc = localStorage.getItem('location') || 'bangalore';
-  const kid = Number(localStorage.getItem('kitchenId'));
-  const kitchen = findKitchenById(loc, kid);
+/* ============================================================
+   3. CATEGORIES PAGE
+============================================================ */
+function initCategoriesPage() {
+    const kid = Number(localStorage.getItem("kitchenId"));
+    const kitchen = APP.kitchenById[kid];
+    const planIds = APP.kitchenPlans[kid] || [];
 
-  const header = document.getElementById('kitchenHeader');
-  const list = document.getElementById('categoriesList');
+    const header = document.getElementById("kitchenHeader");
+    const list = document.getElementById("categoriesList");
 
-  if (!kitchen) {
-    header.innerHTML = '<p>No kitchen selected.</p>';
-  } else {
-header.innerHTML = `
-  <div class="kitchen-header">
-    <img src="${kitchen.img}">
-    <div class="header-content">
-      <h3>${kitchen.name}</h3>
-      <p>Select a diet category available from this kitchen</p>
-    </div>
-  </div>
-`;
-
-    list.innerHTML = '';
-    Object.keys(kitchen.categories).forEach(catKey => {
-      const cat = kitchen.categories[catKey];
-      list.innerHTML += `
-        <div class="card">
-          <img src="${cat.meals[0].img}">
-          <div style="flex:1">
-            <h3>${cat.label}</h3>
-            <p style="color:#6b7280;margin:6px 0;">Meals: ${cat.meals.map(m=>m.type).join(', ')}</p>
-            <button onclick="selectCategory('${catKey}')">View Meals</button>
-          </div>
-        </div>
-      `;
-    });
-  }
-}
-
-function selectCategory(catKey) {
-  localStorage.setItem('categoryKey', catKey);
-  window.location.href = 'meal-options.html';
-}
-
-/* ========== MEAL OPTIONS PAGE ========== */
-if (location.pathname.includes('meal-options.html')) {
-  const loc = localStorage.getItem('location') || 'bangalore';
-  const kid = Number(localStorage.getItem('kitchenId'));
-  const catKey = localStorage.getItem('categoryKey');
-
-  const kitchen = findKitchenById(loc, kid);
-  const category = findCategory(kitchen, catKey);
-  const mealDiv = document.getElementById('mealsList');
-  const header = document.getElementById('mealHeader');
-
-  if (!kitchen || !category) {
-    header.innerHTML = '<p>Missing kitchen or category. Please go back.</p>';
-  } else {
     header.innerHTML = `
-      <div class="card">
-        <img src="${kitchen.img}">
-        <div>
-          <h3>${kitchen.name} — ${category.label}</h3>
-          <p style="color:#6b7280;margin-top:6px;">Select one or more meals (Breakfast / Lunch / Dinner)</p>
+        <div class="card">
+            <img src="${kitchen.image_url}">
+            <div>
+                <h3>${kitchen.kitchen_name}</h3>
+                <p>Select a diet category</p>
+            </div>
         </div>
-      </div>
     `;
 
-    mealDiv.innerHTML = '';
-    category.meals.forEach(meal => {
-      mealDiv.innerHTML += `
+    list.innerHTML = "";
+    planIds.forEach(pid => {
+        const plan = APP.planById[pid];
+        const meals = APP.mealsByKitchenPlan[kid][pid];
+
+        list.innerHTML += `
+            <div class="card">
+                <img src="${meals[0].image_url}">
+                <div>
+                    <h3>${plan.plan_name}</h3>
+                    <p style="color:#666;">Meals: ${meals.map(m => m.meal_type).join(", ")}</p>
+                    <button onclick="selectCategory(${pid})">View Meals</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function selectCategory(pid) {
+    localStorage.setItem("planId", pid);
+    window.location.href = "meal-options.html";
+}
+
+/* ============================================================
+   4. MEALS PAGE
+============================================================ */
+function initMealsPage() {
+    const kid = Number(localStorage.getItem("kitchenId"));
+    const pid = Number(localStorage.getItem("planId"));
+
+    const kitchen = APP.kitchenById[kid];
+    const plan = APP.planById[pid];
+    const meals = APP.mealsByKitchenPlan[kid][pid];
+
+    const header = document.getElementById("mealHeader");
+    const list = document.getElementById("mealsList");
+
+    header.innerHTML = `
         <div class="card">
-          <img src="${meal.img}">
-          <div style="flex:1">
-            <h3>${meal.name}</h3>
-            <p style="color:#6b7280;margin:6px 0;">${meal.type} — ₹${meal.price} / day</p>
-            <label><input type="checkbox" data-id="${meal.id}" data-price="${meal.price}"> Select</label>
-          </div>
+            <img src="${kitchen.image_url}">
+            <div>
+                <h3>${kitchen.kitchen_name} — ${plan.plan_name}</h3>
+                <p>Select one or more meals</p>
+            </div>
         </div>
-      `;
+    `;
+
+    list.innerHTML = "";
+    meals.forEach(m => {
+        list.innerHTML += `
+            <div class="card">
+                <img src="${m.image_url}">
+                <div>
+                    <h3>${m.meal_name}</h3>
+                    <p style="color:#666;">${m.meal_type} — ₹${m.price}/day</p>
+                    <label><input type="checkbox" data-id="${m.meal_id}" data-price="${m.price}"> Select</label>
+                </div>
+            </div>
+        `;
     });
 
-    // restore previous selections if any
-    const saved = JSON.parse(localStorage.getItem('selected_meals_ids') || '[]');
-    document.querySelectorAll('#mealsList input[type="checkbox"]').forEach(cb => {
-      const id = Number(cb.dataset.id);
-      if (saved.includes(id)) cb.checked = true;
+    document.addEventListener("change", evt => {
+        if (evt.target.matches("#mealsList input[type='checkbox']")) {
+            updateMealTotal(meals);
+        }
     });
 
-    // recalc price
-    updateMealTotal();
-  }
+    updateMealTotal(meals);
+}
 
-  // listen for checkbox changes
-  document.addEventListener('change', function (e) {
-    if (e.target && e.target.matches('#mealsList input[type="checkbox"]')) {
-      updateMealTotal();
-    }
-  });
-
-  function updateMealTotal() {
-    const checkboxes = Array.from(document.querySelectorAll('#mealsList input[type="checkbox"]'));
-    const selected = [];
+function updateMealTotal(meals) {
+    const checkboxes = [...document.querySelectorAll("#mealsList input[type='checkbox']")];
+    let selected = [];
     let perDay = 0;
+
     checkboxes.forEach(cb => {
-      if (cb.checked) {
-        selected.push(Number(cb.dataset.id));
-        perDay += Number(cb.dataset.price);
-      }
+        if (cb.checked) {
+            const id = Number(cb.dataset.id);
+            const price = Number(cb.dataset.price);
+            perDay += price;
+
+            const meal = meals.find(m => m.meal_id === id);
+            selected.push(meal);
+        }
     });
 
     const monthly = perDay * 30;
-    document.getElementById('priceBox').innerText = `Total: ₹${monthly} / month`;
-    localStorage.setItem('final_price', monthly);
-    localStorage.setItem('selected_meals_ids', JSON.stringify(selected));
-    localStorage.setItem('selected_meals_perday', perDay);
-    // also save human readable selected meal objects for summary
-    const selectedMeals = [];
-    category.meals.forEach(m => { if (selected.includes(m.id)) selectedMeals.push(m); });
-    localStorage.setItem('selected_meals_objects', JSON.stringify(selectedMeals));
-  }
+
+    localStorage.setItem("selectedMeals", JSON.stringify(selected));
+    localStorage.setItem("perDay", perDay);
+    localStorage.setItem("monthly", monthly);
+
+    document.getElementById("priceBox").innerText = `Total: ₹${monthly} / month`;
 }
 
-/* ========== SUBSCRIBE (user details) ========== */
-if (location.pathname.includes('subscribe.html')) {
-  const summaryBox = document.getElementById('summaryBox');
-  const loc = localStorage.getItem('location') || 'bangalore';
-  const kid = Number(localStorage.getItem('kitchenId'));
-  const catKey = localStorage.getItem('categoryKey');
+/* ============================================================
+   5. SUBSCRIPTION DETAILS PAGE
+============================================================ */
+function initSubscribePage() {
+    const selectedMeals = JSON.parse(localStorage.getItem("selectedMeals") || "[]");
+    const perDay = Number(localStorage.getItem("perDay"));
+    const monthly = Number(localStorage.getItem("monthly"));
 
-  const kitchen = findKitchenById(loc, kid);
-  const category = findCategory(kitchen, catKey);
-  const selectedMeals = JSON.parse(localStorage.getItem('selected_meals_objects') || '[]');
-  const perDay = Number(localStorage.getItem('selected_meals_perday') || 0);
-  const monthly = Number(localStorage.getItem('final_price') || 0);
+    const kid = Number(localStorage.getItem("kitchenId"));
+    const pid = Number(localStorage.getItem("planId"));
 
-  if (!kitchen || !category || !selectedMeals.length) {
-    summaryBox.innerHTML = '<p>Please select kitchen → category → at least one meal before proceeding.</p>';
-    document.getElementById('userForm').style.display = 'none';
-  } else {
-    let mealListHtml = selectedMeals.map(m => `<li>${m.type} — ${m.name} — ₹${m.price}/day</li>`).join('');
-    summaryBox.innerHTML = `
-      <div class="card">
-        <img src="${kitchen.img}">
-        <div>
-          <h3>${kitchen.name} — ${category.label}</h3>
-          <p style="color:#6b7280;margin:6px 0;">Selected meals:</p>
-          <ul style="margin:6px 0 0 18px;">${mealListHtml}</ul>
-          <p style="margin-top:10px;"><strong>Per day:</strong> ₹${perDay} &nbsp; <strong>Monthly:</strong> ₹${monthly}</p>
+    const kitchen = APP.kitchenById[kid];
+    const plan = APP.planById[pid];
+
+    const box = document.getElementById("summaryBox");
+
+    if (!selectedMeals.length) {
+        box.innerHTML = `<p>No meals selected.</p>`;
+        return;
+    }
+
+    box.innerHTML = `
+        <div class="card">
+            <img src="${kitchen.image_url}">
+            <div>
+                <h3>${kitchen.kitchen_name} — ${plan.plan_name}</h3>
+                <p>Selected meals:</p>
+                <ul>
+                    ${selectedMeals.map(m => `<li>${m.meal_type} — ${m.meal_name} — ₹${m.price}/day</li>`).join("")}
+                </ul>
+                <p><strong>Per day:</strong> ₹${perDay}</p>
+                <p><strong>Monthly:</strong> ₹${monthly}</p>
+            </div>
         </div>
-      </div>
     `;
 
-    // form submit
-    document.getElementById('userForm').onsubmit = function (e) {
-      e.preventDefault();
-      localStorage.setItem('user_name', document.getElementById('uname').value);
-      localStorage.setItem('user_mobile', document.getElementById('umobile').value);
-      localStorage.setItem('user_address', document.getElementById('uaddress').value);
-      window.location.href = 'payment.html';
+    document.getElementById("userForm").onsubmit = e => {
+        e.preventDefault();
+        localStorage.setItem("userName", document.getElementById("uname").value);
+        localStorage.setItem("userMobile", document.getElementById("umobile").value);
+        localStorage.setItem("userAddress", document.getElementById("uaddress").value);
+        window.location.href = "payment.html";
     };
-  }
 }
 
-/* ========== PAYMENT PAGE ========== */
-if (location.pathname.includes('payment.html')) {
-  const container = document.getElementById('paymentContainer');
-  const name = localStorage.getItem('user_name') || '';
-  const mobile = localStorage.getItem('user_mobile') || '';
-  const address = localStorage.getItem('user_address') || '';
-  const monthly = localStorage.getItem('final_price') || 0;
+/* ============================================================
+   6. PAYMENT PAGE
+============================================================ */
+function initPaymentPage() {
+    const amount = Number(localStorage.getItem("monthly"));
 
-  container.innerHTML = `
-    <div class="card">
-      <div style="flex:1">
-        <h3>Confirm Payment</h3>
-        <p style="color:#6b7280;">Name: ${name} · Mobile: ${mobile}</p>
-        <p style="color:#6b7280;">Address: ${address}</p>
-        <p style="margin-top:10px;"><strong>Amount to pay:</strong> ₹${monthly}</p>
-        <p style="color:#6b7280;">(This is a mock payment — no real transaction.)</p>
-        <button onclick="completePayment()">Pay Now</button>
-      </div>
-    </div>
-  `;
+    const container = document.getElementById("paymentContainer");
+    container.innerHTML = `
+        <div class="card">
+            <h3>Confirm Payment</h3>
+            <p>Name: ${localStorage.getItem("userName")}</p>
+            <p>Mobile: ${localStorage.getItem("userMobile")}</p>
+            <p>Address: ${localStorage.getItem("userAddress")}</p>
+            <p><strong>Amount:</strong> ₹${amount}</p>
+            <button onclick="completePayment()">Pay Now</button>
+        </div>
+    `;
 }
 
 function completePayment() {
-  // mark subscription as active in localStorage (mock)
-  const sub = {
-    id: 'sub_' + Date.now(),
-    kitchenId: Number(localStorage.getItem('kitchenId')),
-    location: localStorage.getItem('location'),
-    categoryKey: localStorage.getItem('categoryKey'),
-    meals: JSON.parse(localStorage.getItem('selected_meals_objects') || '[]'),
-    perDay: Number(localStorage.getItem('selected_meals_perday') || 0),
-    monthly: Number(localStorage.getItem('final_price') || 0),
-    user: {
-      name: localStorage.getItem('user_name'),
-      mobile: localStorage.getItem('user_mobile'),
-      address: localStorage.getItem('user_address')
-    },
-    createdAt: new Date().toISOString()
-  };
+    const subscription = {
+        id: "sub_" + Date.now(),
+        kitchenId: Number(localStorage.getItem("kitchenId")),
+        planId: Number(localStorage.getItem("planId")),
+        meals: JSON.parse(localStorage.getItem("selectedMeals")),
+        perDay: Number(localStorage.getItem("perDay")),
+        monthly: Number(localStorage.getItem("monthly")),
+        user: {
+            name: localStorage.getItem("userName"),
+            mobile: localStorage.getItem("userMobile"),
+            address: localStorage.getItem("userAddress")
+        }
+    };
 
-  localStorage.setItem('latest_subscription', JSON.stringify(sub));
-  window.location.href = 'success.html';
+    localStorage.setItem("latestSubscription", JSON.stringify(subscription));
+    window.location.href = "success.html";
 }
 
-/* ========== SUCCESS PAGE ========== */
-if (location.pathname.includes('success.html')) {
-  const box = document.getElementById('successBox');
-  const sub = JSON.parse(localStorage.getItem('latest_subscription') || 'null');
-  if (!sub) {
-    box.innerHTML = '<p>No recent subscription found.</p>';
-  } else {
-    const kitchen = findKitchenById(sub.location, sub.kitchenId);
-    const mealsHtml = sub.meals.map(m => `<li>${m.type} — ${m.name} — ₹${m.price}/day</li>`).join('');
+/* ============================================================
+   7. SUCCESS PAGE
+============================================================ */
+function initSuccessPage() {
+    const sub = JSON.parse(localStorage.getItem("latestSubscription"));
+    const box = document.getElementById("successBox");
+
+    if (!sub) {
+        box.innerHTML = `<p>No subscription found.</p>`;
+        return;
+    }
+
+    const kitchen = APP.kitchenById[sub.kitchenId];
+    const plan = APP.planById[sub.planId];
+
     box.innerHTML = `
-      <div class="card">
-        <img src="${kitchen ? kitchen.img : ''}">
-        <div>
-          <h3>Subscription Confirmed</h3>
-          <p style="color:#6b7280;">Name: ${sub.user.name} · Mobile: ${sub.user.mobile}</p>
-          <p style="color:#6b7280;">Kitchen: ${kitchen ? kitchen.name : '—'}</p>
-          <p style="margin-top:8px;"><strong>Selected meals:</strong></p>
-          <ul style="margin:6px 0 0 18px;">${mealsHtml}</ul>
-          <p style="margin-top:10px;"><strong>Per day:</strong> ₹${sub.perDay} · <strong>Monthly:</strong> ₹${sub.monthly}</p>
-          <p style="margin-top:10px; color: #065f46;"><strong>Subscription ID:</strong> ${sub.id}</p>
+        <div class="card">
+            <img src="${kitchen.image_url}">
+            <div>
+                <h3>Subscription Confirmed</h3>
+                <p>Plan: ${plan.plan_name}</p>
+                <ul>
+                    ${sub.meals.map(m => `<li>${m.meal_type} — ${m.meal_name}</li>`).join("")}
+                </ul>
+                <p><strong>Total per month:</strong> ₹${sub.monthly}</p>
+                <p><strong>ID:</strong> ${sub.id}</p>
+            </div>
         </div>
-      </div>
     `;
-  }
 }
