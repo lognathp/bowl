@@ -3,29 +3,157 @@
 <head>
     <meta charset="utf-8" />
     <title>Bowl — Kitchens</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
-<h2>Choose Your Kitchen</h2>
+<!-- HEADER -->
+<header class="header">
+    <div class="header-left">
+        <img src="https://img.icons8.com/color/48/4caf50/salad.png" class="logo-icon">
+        <span class="logo-text">Bowl</span>
+    </div>
 
-<div class="container">
-    <select id="filterCategory">
-        <option value="">Filter by Diet Category</option>
-    </select>
+    <nav class="header-nav">
+        <a href="index.html">Home</a>
+        <a href="#about-us">About Us</a>
+        <a href="#partner">Partner with us</a>
+        <button class="signin-btn">Sign In</button>
+    </nav>
+</header>
 
-    <select id="filterMealType">
-        <option value="">Filter by Meal Type</option>
-        <option value="Breakfast">Breakfast</option>
-        <option value="Lunch">Lunch</option>
-        <option value="Dinner">Dinner</option>
-    </select>
+<!-- PAGE TITLE -->
+<section class="page-title">
+    <h1>Select Your Meal Provider</h1>
 
-    <button id="resetFilters" style="display:none;">Reset</button>
-</div>
+    <div class="filters">
+        <select id="filterPlan">
+            <option value="">Diet Plan</option>
+        </select>
 
-<div class="list" id="kitchensList"></div>
+        <select id="filterMealType">
+            <option value="">Meal Type</option>
+            <option>Breakfast</option>
+            <option>Lunch</option>
+            <option>Dinner</option>
+        </select>
+    </div>
+</section>
+
+
+<!-- KITCHENS LIST -->
+<section class="kitchen-list" id="kitchenContainer">
+    <p>Loading kitchens...</p>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2025 Bowl Health — All Rights Reserved</p>
+</footer>
 
 <script src="js/app.js"></script>
+
+<script>
+    /* ===========================
+       LOAD DATA FROM GOOGLE SHEETS
+    =========================== */
+
+    const SHEET = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM";
+
+    /* Endpoints */
+    const urlLocations = `https://opensheet.elk.sh/${SHEET}/locations`;
+    const urlKitchens  = `https://opensheet.elk.sh/${SHEET}/kitchens`;
+    const urlPlans     = `https://opensheet.elk.sh/${SHEET}/meal_plans`;
+    const urlKitchenPlans = `https://opensheet.elk.sh/${SHEET}/kitchen_meal_plans`;
+    const urlMeals     = `https://opensheet.elk.sh/${SHEET}/meals`;
+
+    let kitchens = [];
+    let plans = [];
+    let kitchenPlans = [];
+    let meals = [];
+
+    /* Load all data */
+    async function loadAllData() {
+        kitchens = await (await fetch(urlKitchens)).json();
+        plans = await (await fetch(urlPlans)).json();
+        kitchenPlans = await (await fetch(urlKitchenPlans)).json();
+        meals = await (await fetch(urlMeals)).json();
+
+        populateFilters();
+        renderKitchens();
+    }
+
+    /* Populate diet plan filter */
+    function populateFilters() {
+        const dropdown = document.getElementById("filterPlan");
+        dropdown.innerHTML = `<option value="">Diet Plan</option>`;
+
+        plans.forEach(p => {
+            dropdown.innerHTML += `<option value="${p.plan_id}">${p.plan_name}</option>`;
+        });
+    }
+
+    function renderKitchens() {
+        const container = document.getElementById("kitchenContainer");
+        container.innerHTML = "";
+
+        const selectedLocation = localStorage.getItem("location_id");
+        const selectedPlan = document.getElementById("filterPlan").value;
+        const selectedMealType = document.getElementById("filterMealType").value;
+
+        let filtered = kitchens.filter(k => k.location_id === selectedLocation);
+
+        /* Apply plan filter */
+        if (selectedPlan) {
+            const allowedKitchenIds = kitchenPlans
+                .filter(kp => kp.plan_id === selectedPlan)
+                .map(kp => kp.kitchen_id);
+
+            filtered = filtered.filter(k => allowedKitchenIds.includes(k.kitchen_id));
+        }
+
+        /* Apply meal type filter */
+        if (selectedMealType) {
+            filtered = filtered.filter(k => {
+                const kitchenMeals = meals.filter(m => m.kitchen_id === k.kitchen_id);
+                return kitchenMeals.some(m => m.meal_type === selectedMealType);
+            });
+        }
+
+        if (!filtered.length) {
+            container.innerHTML = `<p>No kitchens match your filters.</p>`;
+            return;
+        }
+
+        /* Render kitchen cards */
+        filtered.forEach(k => {
+            container.innerHTML += `
+                <div class="kitchen-card">
+                    <img src="${k.image_url}" alt="">
+                    <h3>${k.kitchen_name}</h3>
+                    <p class="kitchen-sub">Goal-based diet plans available</p>
+                    <button class="view-btn" onclick="goToKitchen(${k.kitchen_id})">View Plans</button>
+                </div>
+            `;
+        });
+    }
+
+    /* When clicking View Plans */
+    function goToKitchen(id) {
+        localStorage.setItem("kitchen_id", id);
+        window.location.href = "categories.html";
+    }
+
+    /* Filters listener */
+    document.getElementById("filterPlan").onchange = renderKitchens;
+    document.getElementById("filterMealType").onchange = renderKitchens;
+
+    loadAllData();
+</script>
+
 </body>
 </html>
