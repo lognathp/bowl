@@ -2,15 +2,223 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bowl — Categories</title>
+    <title>Bowl — Choose Diet Category</title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* match kitchens page spacing */
+        .page-title {
+            padding: 28px 40px 0;
+            max-width:1200px;
+            margin:0 auto;
+        }
+        .small-title {
+            font-size:22px;
+            font-weight:600;
+            color:#0b5130;
+            margin-bottom:10px;
+        }
+
+        .category-list {
+            display:flex;
+            flex-wrap:wrap;
+            gap:28px;
+            padding:32px 40px;
+            max-width:1200px;
+            margin:0 auto;
+        }
+
+        /* SAME AS KITCHEN CARD */
+        .kitchen-card {
+            width: 300px;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: transform .14s;
+            display: flex;
+            flex-direction: column;
+        }
+        .kitchen-card:hover { transform: translateY(-6px); }
+
+        .kitchen-card img {
+            width:100%;
+            height:180px;
+            object-fit:cover;
+        }
+
+        .kitchen-body {
+            padding:14px;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            flex:1;
+        }
+
+        .kitchen-body h3 {
+            margin:0;
+            color:#0b5130;
+            font-size:18px;
+            font-weight:700;
+        }
+
+        .kitchen-body p {
+            margin:0;
+            color:#666;
+            font-size:14px;
+        }
+
+        .view-btn {
+            margin-top:auto;
+            padding:10px 14px;
+            border-radius:10px;
+            border:none;
+            background:#4CAF50;
+            color:white;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        @media (max-width:900px){
+          .category-list { padding:20px; justify-content:center; }
+          .kitchen-card { width:92%; }
+        }
+    </style>
 </head>
 <body>
-<h2>Choose Diet Category</h2>
 
-<div class="container" id="kitchenHeader"></div>
-<div class="list" id="categoriesList"></div>
+<!-- HEADER -->
+<header class="header" style="background:#4CAF50;color:white;">
+    <div class="header-left">
+        <img src="https://img.icons8.com/color/48/ffffff/salad.png" class="logo-icon" alt="">
+        <span class="logo-text" style="color:white">Bowl</span>
+    </div>
 
-<script src="js/app.js"></script>
+    <nav class="header-nav" style="color:white">
+        <a href="index.html" style="color:white">Home</a>
+        <a href="#partner">Become Partner</a>
+        <a href="#about-us" style="color:white">About Us</a>
+        <button class="signin-btn">Sign In</button>
+    </nav>
+</header>
+
+<!-- PAGE TITLE -->
+<section class="page-title">
+    <h2 class="small-title">Meal plans</h2>
+</section>
+
+<!-- CATEGORY CARDS -->
+<section id="categoryList" class="category-list">
+    <p style="color:#666; padding:28px;">Loading meal plans…</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2025 Bowl Health — All Rights Reserved</p>
+</footer>
+
+<!-- SCRIPT -->
+<script>
+    (function(){
+
+      const SHEET_ID = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM";  // <-- replace
+      const URL_KITCHENS = `https://opensheet.elk.sh/${SHEET_ID}/kitchens`;
+      const URL_PLANS = `https://opensheet.elk.sh/${SHEET_ID}/meal_plans`;
+      const URL_KITCHEN_PLANS = `https://opensheet.elk.sh/${SHEET_ID}/kitchen_meal_plans`;
+      const URL_MEALS = `https://opensheet.elk.sh/${SHEET_ID}/meals`;
+
+      let kitchens=[], plans=[], kitchenPlans=[], meals=[];
+
+      function normalize(rows){
+        return rows.map(r=>{
+          const o={};
+          Object.keys(r).forEach(k=>o[k.trim()] = (r[k]||"").trim());
+          return o;
+        });
+      }
+
+      async function loadAll(){
+        const [k,p,kp,m] = await Promise.all([
+          fetch(URL_KITCHENS), fetch(URL_PLANS), fetch(URL_KITCHEN_PLANS), fetch(URL_MEALS)
+        ]);
+
+        kitchens = normalize(await k.json());
+        plans = normalize(await p.json());
+        kitchenPlans = normalize(await kp.json());
+        meals = normalize(await m.json());
+
+        kitchens.forEach(k=>k.kitchen_id=String(k.kitchen_id));
+        plans.forEach(p=>p.plan_id=String(p.plan_id));
+        kitchenPlans.forEach(x=>{
+          x.kitchen_id=String(x.kitchen_id);
+          x.plan_id=String(x.plan_id);
+          x.enabled = String(x.enabled).toLowerCase()==="true";
+        });
+        meals.forEach(m=>{
+          m.kitchen_id=String(m.kitchen_id);
+          m.plan_id=String(m.plan_id);
+        });
+
+        loadCategories();
+      }
+
+      function loadCategories(){
+        const kid = localStorage.getItem("kitchenId") || localStorage.getItem("kitchen_id");
+        const container = document.getElementById("categoryList");
+
+        if(!kid){
+          container.innerHTML = `<p style="padding:28px;">No kitchen selected. Go back to <a href="kitchens.html">Kitchens</a>.</p>`;
+          return;
+        }
+
+        const enabledPlans = kitchenPlans.filter(x =>
+            x.kitchen_id === kid && x.enabled
+        );
+
+        if(!enabledPlans.length){
+          container.innerHTML = `<p style="padding:28px;">No plans available for this kitchen.</p>`;
+          return;
+        }
+
+        container.innerHTML = "";
+
+        enabledPlans.forEach(rec=>{
+          const plan = plans.find(p=>p.plan_id === rec.plan_id);
+          if(!plan) return;
+
+          const sampleMeal = meals.find(m =>
+              m.kitchen_id === kid && m.plan_id === rec.plan_id
+          );
+
+          const img = sampleMeal?.image_url || plan.image_url ||
+            "https://via.placeholder.com/400x250?text=Meal";
+
+          container.innerHTML += `
+            <div class="kitchen-card">
+              <img src="${img}" />
+              <div class="kitchen-body">
+                <h3>${plan.plan_name}</h3>
+                <p>${plan.description || ""}</p>
+                <button class="view-btn" onclick="selectPlan('${plan.plan_id}')">View Meals</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      window.selectPlan = function(planId){
+        localStorage.setItem("planId", planId);
+        localStorage.setItem("plan_id", planId);
+        window.location.href = "meal-options.html";
+      };
+
+      loadAll();
+
+    })();
+</script>
+
 </body>
 </html>

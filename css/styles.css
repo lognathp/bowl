@@ -1,136 +1,353 @@
-/* Basic modern styles */
-:root {
-  --accent: #ff7a00;
-  --muted: #6b7280;
-  --card-bg: #ffffff;
-  --page-bg: #f7f7f9;
+/* =========================================
+   GLOBAL RESET
+========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-* { box-sizing: border-box; }
 body {
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  margin: 0;
-  padding: 20px 16px;
-  background: var(--page-bg);
-  color: #111827;
-  -webkit-font-smoothing: antialiased;
+    font-family: "Inter", sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
 }
 
-h2 { text-align:center; margin: 12px 0 20px; font-size: 24px; }
-
-.container {
-  width: 94%;
-  max-width: 760px;
-  margin: 10px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* =========================================
+   HEADER
+========================================= */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    background: #4CAF50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
-.list {
-  width: 94%;
-  max-width: 760px;
-  margin: 10px auto 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* card */
-.card {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--card-bg);
-  box-shadow: 0 4px 18px rgba(15,23,42,0.06);
+.logo-text {
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
 }
 
-.card img {
-  width: 120px;
-  height: 90px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
 }
 
-/* Highlighted Kitchen Header Card */
-.kitchen-header {
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+.header-nav a {
+    text-decoration: none;
+    font-weight: 600;
+    color: white;
 }
 
-.kitchen-header img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
+.header-nav a:hover {
+    color: black;
 }
 
-.kitchen-header .header-content {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0));
-  color: white;
+.signin-btn {
+    padding: 10px 22px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    background: white;
+    cursor: pointer;
+}
+.signin-btn:hover {
+    background: black;
+    color: white;
 }
 
-.kitchen-header h3 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
+/* =========================================
+   HERO SECTION
+========================================= */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    padding: 80px 60px;
+    background: #E9FFEA;
+    min-height: 520px;
+    align-items: center;
 }
 
-.kitchen-header p {
-  margin: 4px 0 0;
-  font-size: 14px;
-  opacity: 0.9;
+.hero-left {
+    width: 40%;
 }
 
-/* simple text */
-.card h3 { margin: 0 0 6px; font-size: 18px; }
-.card p { margin: 2; color: var(--muted); font-size: 14px; }
-
-/* controls */
-button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 15px;
+.hero-left h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #2A572A;
+    line-height: 1.1;
 }
 
-button:hover { opacity: .95; }
-
-input, textarea, select {
-  border-radius: 10px;
-  border: 1px solid #e6e7eb;
-  padding: 10px;
-  font-size: 15px;
-  outline: none;
+.hero-sub {
+    font-size: 20px;
+    margin-top: 10px;
+    color: #4A4A4A;
 }
 
-#priceBox {
-  font-weight: 700;
-  font-size: 18px;
-  text-align: center;
-  padding: 12px;
-  border-radius: 10px;
-  background: white;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+/* LOCATION SELECT ROW */
+.location-row {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
 }
 
-/* responsive */
-@media (max-width:640px) {
-  .card { padding: 12px; gap: 12px; }
-  .card img { width: 96px; height: 72px; }
+#locationSelect {
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 260px;
+    font-size: 16px;
+}
+
+.continue-btn {
+    padding: 14px 24px;
+    border-radius: 8px;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.continue-btn:hover {
+    background: #43A047;
+}
+
+/* RIGHT IMAGE */
+.hero-right {
+    width: 60%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.hero-right img {
+    width: 95%;
+    max-width: 720px;
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* =========================================
+   FEATURE CARDS
+========================================= */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 60px 40px;
+}
+
+.feature-card {
+    width: 300px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+}
+
+.feature-card img {
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 14px;
+}
+
+.feature-card h3 {
+    font-size: 20px;
+    color: #2E7D32;
+}
+
+.feature-card p {
+    font-size: 15px;
+    color: #555;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+.footer {
+    background: #4CAF50;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    margin-top: 60px;
+    font-size: 14px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    .hero-left {
+        width: 100%;
+    }
+    .hero-right {
+        width: 100%;
+        justify-content: center;
+        margin-top: 20px;
+    }
+}
+
+/* PAGE TITLE */
+.page-title {
+    padding: 40px 50px 20px;
+}
+
+.page-title h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #2A572A;
+}
+
+/* FILTERS */
+.filters {
+    display: flex;
+    gap: 14px;
+}
+
+.filters select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 200px;
+}
+
+/* KITCHEN LIST */
+.kitchen-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    padding: 40px 50px;
+}
+
+.kitchen-card {
+    width: 280px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.kitchen-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 12px;
+}
+
+.kitchen-card h3 {
+    font-size: 20px;
+    margin-bottom: 6px;
+    color: #2E7D32;
+}
+
+.kitchen-sub {
+    font-size: 14px;
+    color: #777;
+}
+
+.view-btn {
+    margin-top: 12px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    background: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background: #43A047;
+}
+
+/* ========== MODAL OVERLAY ========== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    width: 420px;
+    padding: 24px;
+    border-radius: 14px;
+    animation: popup 0.25s ease;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+}
+
+@keyframes popup {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #0b5130;
+}
+
+.modal-text {
+    color: #555;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.pay-btn {
+    background: #4CAF50;
+    padding: 14px;
+    color: white;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+.pay-btn:hover {
+    background: #43a047;
+}
+
+.success-icon {
+    font-size: 60px;
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 10px;
 }
