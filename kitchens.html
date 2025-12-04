@@ -4,155 +4,229 @@
     <meta charset="utf-8" />
     <title>Bowl — Kitchens</title>
 
+    <!-- Fonts + Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-</head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
+    <style>
+        .clear-btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4CAF50;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    background: #f4f4f4;
+}
+        /* page-local tweaks in case your global CSS is missing some of these */
+        .page-title { padding: 28px 40px 8px; max-width:1200px; margin:0 auto; }
+        .small-title { font-size:24px; font-weight:600; color:#fff; /* placeholder - header is green so keep light */ }
+        .filters { display:flex; gap:14px; margin-top:12px; flex-wrap:wrap; align-items:center; }
+        .filters select { padding:12px; border-radius:8px; border:1px solid #ddd; min-width:180px; }
+        .kitchen-list { display:flex; flex-wrap:wrap; gap:28px; padding:32px 40px; max-width:1200px; margin:0 auto; }
+        .kitchen-card { width: 300px; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08); transition:transform .14s; display:flex; flex-direction:column; }
+        .kitchen-card:hover { transform: translateY(-6px); }
+        .kitchen-card img { width:100%; height:180px; object-fit:cover; }
+        .kitchen-body { padding:14px; display:flex; flex-direction:column; gap:8px; flex:1; }
+        .kitchen-body h3 { margin:0; font-size:18px; color:#0b5130; font-weight:700; }
+        .kitchen-body p { margin:0; color:#666; font-size:14px; }
+        .view-btn { margin-top:auto; padding:10px 14px; border-radius:10px; border:none; background:#fff; color:#0b5130; font-weight:700; cursor:pointer; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.06); }
+        .view-btn.primary { background:#4CAF50; color:#fff; box-shadow:none; }
+        @media (max-width:900px){ .kitchen-list{justify-content:center;padding:20px} .kitchen-card{width:92%} .page-title{padding:18px} .filters{justify-content:center} }
+    </style>
+</head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
+<!-- HEADER (green, white text) -->
+<header class="header" style="background:#4CAF50; color:white;">
     <div class="header-left">
-        <img src="https://img.icons8.com/color/48/4caf50/salad.png" class="logo-icon">
-        <span class="logo-text">Bowl</span>
+        <img src="https://img.icons8.com/color/48/ffffff/salad.png" class="logo-icon" alt="">
+        <span class="logo-text" style="color:white">Bowl</span>
     </div>
 
-    <nav class="header-nav">
-        <a href="index.html">Home</a>
-        <a href="#about-us">About Us</a>
-        <a href="#partner">Partner with us</a>
+    <nav class="header-nav" style="color:white">
+        <a href="index.html" style="color:white">Home</a>
+        <a href="#about-us" style="color:white">About Us</a>
+        <a href="#partner">Become Partner</a>
         <button class="signin-btn">Sign In</button>
     </nav>
 </header>
 
-<!-- PAGE TITLE -->
+<!-- Title + Filters -->
 <section class="page-title">
-    <h1>Select Your Meal Provider</h1>
+    <h2 class="small-title" style="color:#0b5130; font-size:22px; margin-bottom:8px;">Kitchens</h2>
 
-    <div class="filters">
+    <div class="filters" style="margin-top:4px;">
         <select id="filterPlan">
-            <option value="">Diet Plan</option>
+            <option value="">Diet Plan (All)</option>
         </select>
 
         <select id="filterMealType">
-            <option value="">Meal Type</option>
-            <option>Breakfast</option>
-            <option>Lunch</option>
-            <option>Dinner</option>
+            <option value="">All meal types</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
         </select>
+
+        <button id="resetFilters" class="clear-btn">Clear</button>
     </div>
 </section>
 
-
-<!-- KITCHENS LIST -->
-<section class="kitchen-list" id="kitchenContainer">
-    <p>Loading kitchens...</p>
+<!-- Kitchen cards container -->
+<section id="kitchenContainer" class="kitchen-list" aria-live="polite">
+    <p style="color:#666; padding:28px;">Loading kitchens...</p>
 </section>
 
-
-<!-- FOOTER -->
+<!-- Footer -->
 <footer class="footer">
     <p>© 2025 Bowl Health — All Rights Reserved</p>
 </footer>
 
-<script src="js/app.js"></script>
-
+<!-- Data + Rendering Script -->
 <script>
-    /* ===========================
-       LOAD DATA FROM GOOGLE SHEETS
-    =========================== */
+    (function(){
+      // TODO: replace with your real Google Sheet ID
+      const SHEET_ID = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM";
 
-    const SHEET = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM";
+      // endpoints
+      const URL_KITCHENS = `https://opensheet.elk.sh/${SHEET_ID}/kitchens`;
+      const URL_PLANS = `https://opensheet.elk.sh/${SHEET_ID}/meal_plans`;
+      const URL_KITCHEN_PLANS = `https://opensheet.elk.sh/${SHEET_ID}/kitchen_meal_plans`;
+      const URL_MEALS = `https://opensheet.elk.sh/${SHEET_ID}/meals`;
 
-    /* Endpoints */
-    const urlLocations = `https://opensheet.elk.sh/${SHEET}/locations`;
-    const urlKitchens  = `https://opensheet.elk.sh/${SHEET}/kitchens`;
-    const urlPlans     = `https://opensheet.elk.sh/${SHEET}/meal_plans`;
-    const urlKitchenPlans = `https://opensheet.elk.sh/${SHEET}/kitchen_meal_plans`;
-    const urlMeals     = `https://opensheet.elk.sh/${SHEET}/meals`;
+      // data holders
+      let kitchens = [], plans = [], kitchenPlans = [], meals = [];
 
-    let kitchens = [];
-    let plans = [];
-    let kitchenPlans = [];
-    let meals = [];
+      // helper: convert numeric-ish fields to numbers and trim
+      function normalize(arr) {
+        return arr.map(r=>{
+          const out = {};
+          Object.keys(r||{}).forEach(k => { out[k.trim()] = (r[k] || "").trim(); });
+          return out;
+        });
+      }
 
-    /* Load all data */
-    async function loadAllData() {
-        kitchens = await (await fetch(urlKitchens)).json();
-        plans = await (await fetch(urlPlans)).json();
-        kitchenPlans = await (await fetch(urlKitchenPlans)).json();
-        meals = await (await fetch(urlMeals)).json();
+      // load all sheets in parallel
+      async function loadAll() {
+        try {
+          const [kRes, pRes, kpRes, mRes] = await Promise.all([
+            fetch(URL_KITCHENS), fetch(URL_PLANS), fetch(URL_KITCHEN_PLANS), fetch(URL_MEALS)
+          ]);
+          kitchens = normalize(await kRes.json());
+          plans = normalize(await pRes.json());
+          kitchenPlans = normalize(await kpRes.json());
+          meals = normalize(await mRes.json());
 
-        populateFilters();
-        renderKitchens();
-    }
+          // convert ids to strings (OpenSheet returns strings); keeping as strings is easier for localStorage comparison
+          kitchens.forEach(k => { k.kitchen_id = String(k.kitchen_id); k.location_id = String(k.location_id); });
+          plans.forEach(p => p.plan_id = String(p.plan_id));
+          kitchenPlans.forEach(kp => { kp.kitchen_id = String(kp.kitchen_id); kp.plan_id = String(kp.plan_id); kp.enabled = String(kp.enabled).toLowerCase() === "true"; });
+          meals.forEach(m => { m.meal_id = String(m.meal_id); m.kitchen_id = String(m.kitchen_id); m.plan_id = String(m.plan_id); m.price = Number(m.price || 0); });
 
-    /* Populate diet plan filter */
-    function populateFilters() {
-        const dropdown = document.getElementById("filterPlan");
-        dropdown.innerHTML = `<option value="">Diet Plan</option>`;
+          populatePlanFilter();
+          renderKitchens();
+        } catch (err) {
+          console.error("Failed loading sheet data", err);
+          document.getElementById('kitchenContainer').innerHTML = '<p style="color:#c00; padding:20px;">Failed to load kitchens — check your SHEET_ID and that your sheet is published.</p>';
+        }
+      }
 
+      function populatePlanFilter(){
+        const sel = document.getElementById('filterPlan');
+        sel.innerHTML = '<option value="">Diet Plan (All)</option>';
         plans.forEach(p => {
-            dropdown.innerHTML += `<option value="${p.plan_id}">${p.plan_name}</option>`;
+          sel.innerHTML += `<option value="${p.plan_id}">${p.plan_name}</option>`;
         });
-    }
+      }
 
-    function renderKitchens() {
-        const container = document.getElementById("kitchenContainer");
-        container.innerHTML = "";
+      function renderKitchens(){
+        const container = document.getElementById('kitchenContainer');
+        const loc = localStorage.getItem('location') || localStorage.getItem('location_id') || null;
+        const selectedPlan = document.getElementById('filterPlan').value || "";
+        const selectedMealType = document.getElementById('filterMealType').value || "";
 
-        const selectedLocation = localStorage.getItem("location_id");
-        const selectedPlan = document.getElementById("filterPlan").value;
-        const selectedMealType = document.getElementById("filterMealType").value;
+        // filter by location first
+        let list = kitchens.slice();
+        if (loc) list = list.filter(k => String(k.location_id) === String(loc));
 
-        let filtered = kitchens.filter(k => k.location_id === selectedLocation);
-
-        /* Apply plan filter */
+        // filter by plan: find kitchens that have the plan enabled
         if (selectedPlan) {
-            const allowedKitchenIds = kitchenPlans
-                .filter(kp => kp.plan_id === selectedPlan)
-                .map(kp => kp.kitchen_id);
-
-            filtered = filtered.filter(k => allowedKitchenIds.includes(k.kitchen_id));
+          const allowed = kitchenPlans.filter(kp => kp.plan_id === selectedPlan && kp.enabled).map(kp => String(kp.kitchen_id));
+          list = list.filter(k => allowed.includes(String(k.kitchen_id)));
         }
 
-        /* Apply meal type filter */
+        // filter by meal type
         if (selectedMealType) {
-            filtered = filtered.filter(k => {
-                const kitchenMeals = meals.filter(m => m.kitchen_id === k.kitchen_id);
-                return kitchenMeals.some(m => m.meal_type === selectedMealType);
-            });
+          list = list.filter(k => {
+            return meals.some(m => String(m.kitchen_id) === String(k.kitchen_id) && m.meal_type === selectedMealType);
+          });
         }
 
-        if (!filtered.length) {
-            container.innerHTML = `<p>No kitchens match your filters.</p>`;
-            return;
+        if (!list.length) {
+          container.innerHTML = '<p style="color:#666; padding:28px;">No kitchens found for selected filters/location.</p>';
+          return;
         }
 
-        /* Render kitchen cards */
-        filtered.forEach(k => {
-            container.innerHTML += `
-                <div class="kitchen-card">
-                    <img src="${k.image_url}" alt="">
-                    <h3>${k.kitchen_name}</h3>
-                    <p class="kitchen-sub">Goal-based diet plans available</p>
-                    <button class="view-btn" onclick="goToKitchen(${k.kitchen_id})">View Plans</button>
-                </div>
-            `;
+        // render cards
+        container.innerHTML = '';
+        list.forEach(k => {
+          const img = k.image_url || 'https://via.placeholder.com/400x250?text=Kitchen';
+          container.innerHTML += `
+            <article class="kitchen-card" role="article">
+              <img src="${img}" alt="${escapeHtml(k.kitchen_name)}" />
+              <div class="kitchen-body">
+                <h3>${escapeHtml(k.kitchen_name)}</h3>
+                <p>${getPlanLabelsForKitchen(k.kitchen_id)}</p>
+                <button class="view-btn primary" onclick="goToKitchen('${k.kitchen_id}')">View Plans</button>
+              </div>
+            </article>
+          `;
         });
-    }
+      }
 
-    /* When clicking View Plans */
-    function goToKitchen(id) {
-        localStorage.setItem("kitchen_id", id);
-        window.location.href = "categories.html";
-    }
+      // helper: list plan names served by a kitchen
+      function getPlanLabelsForKitchen(kid){
+        const kp = kitchenPlans.filter(x => String(x.kitchen_id) === String(kid) && x.enabled);
+        if (!kp.length) return 'No plans';
+        return kp.map(x => {
+          const p = plans.find(pp => String(pp.plan_id) === String(x.plan_id));
+          return p ? p.plan_name : '';
+        }).filter(Boolean).join(' · ');
+      }
 
-    /* Filters listener */
-    document.getElementById("filterPlan").onchange = renderKitchens;
-    document.getElementById("filterMealType").onchange = renderKitchens;
+      // small HTML escape to avoid injection when rendering sheet values
+      function escapeHtml(s){
+        if (!s) return '';
+        return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+      }
 
-    loadAllData();
+      // navigation helper
+      window.goToKitchen = function(kid){
+        localStorage.setItem('kitchenId', String(kid));
+        // keep older key name used elsewhere too
+        localStorage.setItem('kitchen_id', String(kid));
+        window.location.href = 'categories.html';
+      };
+
+      // event listeners for filters and reset
+      document.addEventListener('change', (e)=>{
+        if (e.target && (e.target.id === 'filterPlan' || e.target.id === 'filterMealType')) renderKitchens();
+      });
+      document.getElementById('resetFilters').addEventListener('click', ()=>{
+        document.getElementById('filterPlan').value = '';
+        document.getElementById('filterMealType').value = '';
+        renderKitchens();
+      });
+
+      // start
+      loadAll();
+    })();
 </script>
 
 </body>

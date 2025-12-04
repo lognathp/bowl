@@ -2,30 +2,338 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Bowl — Subscription Details</title>
+    <title>Bowl — Delivery Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        .page-title {
+            padding: 30px 20px 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .small-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b5130;
+        }
+
+        .summary-card {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            gap: 18px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+        }
+
+        .summary-card img {
+            width: 160px;
+            height: 130px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .summary-body { flex: 1; }
+
+        .summary-body h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0b5130;
+        }
+
+        .summary-body p, .summary-body li {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* FORM BOX */
+        .form-box {
+            max-width: 1000px;
+            margin: 20px auto 60px;
+            padding: 22px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+        }
+
+        .form-box h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #0b5130;
+            font-weight: 700;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #0b5130;
+            margin-bottom: 6px;
+            margin-top: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .flex-col {
+            flex: 1;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 16px;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 17px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .primary-btn:hover {
+            background: #43a047;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Subscription Details</h2>
+<!-- HEADER -->
+<header class="header" style="background:#4CAF50; color:white;">
+    <div class="header-left">
+        <img src="https://img.icons8.com/color/48/ffffff/salad.png" class="logo-icon">
+        <span class="logo-text" style="color:white;">Bowl</span>
+    </div>
 
-<div id="summaryBox"></div>
+    <nav class="header-nav">
+        <a href="index.html" style="color:white;">Home</a>
+        <a href="kitchens.html" style="color:white;">Kitchens</a>
+        <a href="#" style="color:white;">About</a>
 
-<div class="container">
-    <form id="userForm">
-        <label>Name</label>
-        <input type="text" id="uname" required>
+        <button class="signin-btn"
+                style="background:white; color:#4CAF50; padding:8px 12px; border-radius:8px; font-weight:700;">
+            Sign In
+        </button>
+    </nav>
+</header>
 
-        <label>Mobile</label>
-        <input type="text" id="umobile" required>
+<!-- TITLE -->
+<section class="page-title">
+    <h2 class="small-title">Delivery & Contact Details</h2>
+</section>
 
-        <label>Delivery Address</label>
-        <textarea id="uaddress" required></textarea>
+<!-- SUMMARY CARD -->
+<section id="summaryCard" class="summary-card">
+    Loading subscription summary...
+</section>
 
-        <button type="submit">Proceed to Payment</button>
+<!-- ADDRESS FORM -->
+<section class="form-box">
+    <h3>Your Details</h3>
+
+    <form id="addressForm">
+
+        <!-- NAME -->
+        <label>Full Name</label>
+        <input type="text" id="uname" placeholder="Enter your name" required>
+
+        <!-- MOBILE -->
+        <label>Mobile Number</label>
+        <input type="text" id="umobile" maxlength="10" placeholder="10-digit mobile" required>
+
+        <h3 style="margin-top:25px;">Delivery Address</h3>
+
+        <!-- ADDRESS 1 -->
+        <label>Address Line 1</label>
+        <input type="text" id="addr1" placeholder="Flat no / Building name" required>
+
+        <!-- ADDRESS 2 -->
+        <label>Address Line 2</label>
+        <input type="text" id="addr2" placeholder="Area / Locality">
+
+        <!-- STREET -->
+        <label>Street</label>
+        <input type="text" id="street" placeholder="Street / Road name">
+
+        <div class="flex-row">
+            <div class="flex-col">
+                <label>City</label>
+                <input type="text" id="city" required>
+            </div>
+
+            <div class="flex-col">
+                <label>Pincode</label>
+                <input type="text" id="pincode" maxlength="6" required>
+            </div>
+        </div>
+
+        <button class="primary-btn">Proceed to Payment</button>
     </form>
+</section>
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 class="modal-title">Confirm Payment</h3>
+        <p class="modal-text" id="paymentSummary">Loading...</p>
+        <button class="pay-btn" onclick="completePayment()">Pay Now</button>
+    </div>
 </div>
 
-<script src="js/app.js"></script>
+<!-- SUCCESS MODAL -->
+<div id="successModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="success-icon">✔</div>
+        <h3 class="modal-title">Subscription Confirmed</h3>
+        <p class="modal-text" id="successDetails"></p>
+
+        <button class="pay-btn" onclick="closeSuccess()">Close</button>
+    </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="footer" style="background:#4CAF50; color:white; padding:20px; text-align:center;">
+    © 2025 Bowl Health — All Rights Reserved
+</footer>
+
+<script>
+    (function(){
+
+        const SHEET_ID = "1w1xw3igo03UEw159KDTXPUgLg1Pg9dNKRDDl3ZdxmuM";
+
+        const URL_KITCHENS = `https://opensheet.elk.sh/${SHEET_ID}/kitchens`;
+        const URL_PLANS    = `https://opensheet.elk.sh/${SHEET_ID}/meal_plans`;
+        const URL_MEALS    = `https://opensheet.elk.sh/${SHEET_ID}/meals`;
+
+        const summaryCard = document.getElementById("summaryCard");
+
+        const kitchenId = localStorage.getItem("kitchenId");
+        const planId    = localStorage.getItem("planId");
+        const selected  = JSON.parse(localStorage.getItem("selected_meals_ids") || "[]");
+
+        const perDay  = Number(localStorage.getItem("per_day_price") || 0);
+        const monthly = Number(localStorage.getItem("monthly_price") || 0);
+
+        async function loadSummary(){
+            const [kData, pData, mData] = await Promise.all([
+                fetch(URL_KITCHENS).then(r => r.json()),
+                fetch(URL_PLANS).then(r => r.json()),
+                fetch(URL_MEALS).then(r => r.json()),
+            ]);
+
+            const kitchen = kData.find(k => String(k.kitchen_id) === kitchenId);
+            const plan = pData.find(p => String(p.plan_id) === planId);
+            const meals = mData.filter(m => selected.includes(m.meal_id));
+
+            summaryCard.innerHTML = `
+                <img src="${kitchen.image_url}">
+                <div class="summary-body">
+                    <h3>${kitchen.kitchen_name}</h3>
+                    <p><strong>Plan:</strong> ${plan.plan_name}</p>
+
+                    <p><strong>Meals:</strong></p>
+                    <ul>
+                        ${meals.map(m => `<li>${m.meal_name} — ₹${m.price}/day</li>`).join("")}
+                    </ul>
+
+                    <p style="margin-top:10px;">
+                        <strong>Daily:</strong> ₹${perDay} &nbsp;&nbsp;
+                        <strong>Monthly:</strong> ₹${monthly}
+                    </p>
+                </div>
+            `;
+        }
+
+        document.getElementById("addressForm").onsubmit = function(e){
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById("uname").value,
+                mobile: document.getElementById("umobile").value,
+                addr1: document.getElementById("addr1").value,
+                addr2: document.getElementById("addr2").value,
+                street: document.getElementById("street").value,
+                city: document.getElementById("city").value,
+                pincode: document.getElementById("pincode").value,
+            };
+
+            localStorage.setItem("user_details", JSON.stringify(data));
+            openPayment();
+        };
+
+        loadSummary();
+
+    })();
+
+    window.openPayment = function() {
+    const monthly = localStorage.getItem("monthly_price");
+    const name = document.getElementById("uname").value;
+
+    document.getElementById("paymentSummary").innerHTML =
+        `Name: ${name}<br>Amount: ₹${monthly}<br><br>(Mock Payment — no real charge)`;
+
+    document.getElementById("paymentModal").classList.add("active");
+};
+
+window.completePayment = function() {
+    // Store subscription
+    const sub = {
+        id: "sub_" + Date.now(),
+        kitchenId: localStorage.getItem("kitchenId"),
+        planId: localStorage.getItem("planId"),
+        meals: JSON.parse(localStorage.getItem("selected_meals_ids") || "[]"),
+        price: localStorage.getItem("monthly_price"),
+        user: JSON.parse(localStorage.getItem("user_details") || "{}"),
+        date: new Date().toISOString()
+    };
+
+    localStorage.setItem("latest_subscription", JSON.stringify(sub));
+
+    // Close payment modal
+    document.getElementById("paymentModal").classList.remove("active");
+
+    // Show success modal
+    document.getElementById("successDetails").innerHTML =
+        `Your subscription ID is <strong>${sub.id}</strong><br>
+         Monthly Price: ₹${sub.price}`;
+
+    document.getElementById("successModal").classList.add("active");
+};
+
+window.closeSuccess = function() {
+    document.getElementById("successModal").classList.remove("active");
+    window.location.href = "index.html";
+};
+</script>
+
 </body>
 </html>
